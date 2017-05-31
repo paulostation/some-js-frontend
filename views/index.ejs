@@ -4,6 +4,38 @@
     <title><%= title %></title>
     <link rel='stylesheet' href='/stylesheets/style.css' />
     <link rel='stylesheet' href='/stylesheets/dropzone.css' />
+    <script
+  src="https://code.jquery.com/jquery-3.2.1.min.js"
+  integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+  crossorigin="anonymous"></script>
+  <!--<script type="text/javascript" src="/js/index.js"></script>-->
+  <script type="text/javascript" >
+
+  function analyzeStuff() {
+  	
+    let success = function(result) {
+        $('#result').html(result);
+    };
+
+    let error = function(error) {
+        console.error("Error while analyzing images: ", error);
+    };
+
+    let ajaxSettings = {
+        type: "GET",
+        url: '/test',
+        success: success,
+        error: error,
+        statusCode: {
+            404: function() {
+                reject("page not found");
+            }
+        }
+    };
+
+    $.ajax(ajaxSettings);
+}
+  </script>
   </head>
   <body>
     <h1><%= title %></h1>
@@ -13,6 +45,19 @@
     <input name="file" type="file" multiple />
   </div>
 </form>
+<form action="/file-upload2" class="dropzone">
+  <div class="fallback">
+    <input name="file" type="file" multiple />
+  </div>
+</form>
+
+	<input type="button" value="analyze" onsubmit="analyzeStuff()">
+	<button onclick="analyzeStuff()">Click me</button>
+	<div id="result">
+	</div>
+
     <script src="/js/dropzone.js"></script>
+	
+
   </body>
 </html>

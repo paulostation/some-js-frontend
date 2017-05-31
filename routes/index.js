@@ -8,12 +8,12 @@ const path = require('path');
 const multipart = require('connect-multiparty');
 const multipartMiddleware = multipart();
 
-var image1 = 
+var image1 =
 
-/* GET home page. */
-router.get('/', function(req, res, next) {
-    res.render('index', { title: 'Express' });
-});
+    /* GET home page. */
+    router.get('/', function(req, res, next) {
+        res.render('index', { title: 'Express' });
+    });
 
 router.get('/test', (req, res) => {
     'use strict';
@@ -39,9 +39,7 @@ router.get('/test', (req, res) => {
     });
 
     command.on('close', code => {
-        // if (code !== 0) {
-        //     res.send("something went wrong");
-        // }
+
         console.log(`child process exited with code ${code}`);
         if (!isResponseSent)
             res.status(200).send(output);
@@ -52,18 +50,35 @@ router.get('/test', (req, res) => {
 
 router.post('/file-upload', multipartMiddleware, (req, res) => {
     //convert path to string
-   let filePath = "" + req.files.file.path;
-   console.log(req.files.file);
-   
+    let filePath = "" + req.files.file.path;
+
     fs.readFile(filePath, function(err, data) {
-        var newPath = path.join(__dirname, "/../uploadedImages/" + req.files.file.originalFilename);
+        var newPath = path.join(__dirname, "/../uploadedImages/even" + req.files.file.originalFilename);
         fs.writeFile(newPath, data, function(err) {
             if (err) {
-                console.error("Error while saving image: ",err);                
-            } else {                
+                console.error("Error while saving image: ", err);
+            } else {
                 res.status(200).send("OK");
             }
-            
+
+        });
+    });
+
+});
+
+router.post('/file-upload2', multipartMiddleware, (req, res) => {
+    //convert path to string
+    let filePath = "" + req.files.file.path;
+
+    fs.readFile(filePath, function(err, data) {
+        var newPath = path.join(__dirname, "/../uploadedImages/odd" + req.files.file.originalFilename);
+        fs.writeFile(newPath, data, function(err) {
+            if (err) {
+                console.error("Error while saving image: ", err);
+            } else {
+                res.status(200).send("OK");
+            }
+
         });
     });
 
