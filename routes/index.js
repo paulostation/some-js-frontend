@@ -21,7 +21,7 @@ router.get('/test', (req, res) => {
     let isResponseSent = false;
     const spawn = require('child_process').spawn;
 
-    let command = spawn('../../demos/compare.py ../uploadedImages/{even/*,odd/*}');
+    let command = spawn('../../openface/demos/compare.py ../uploadedImages/even/* ../uploadedImages/odd/*');
 
     command.stdout.on('data', data => {
         output += data;
@@ -51,7 +51,7 @@ router.get('/test', (req, res) => {
 router.post('/file-upload', multipartMiddleware, (req, res) => {
     //convert path to string
     let filePath = "" + req.files.file.path;
-
+	console.log(filePath);
     fs.readFile(filePath, function(err, data) {
         var newPath = path.join(__dirname, "/../uploadedImages/even/" + req.files.file.originalFilename);
         fs.writeFile(newPath, data, function(err) {
