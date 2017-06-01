@@ -21,7 +21,7 @@ router.get('/test', (req, res) => {
     let isResponseSent = false;
     const spawn = require('child_process').spawn;
 
-    let command = spawn('../demos/compare.py ../images/examples/{lennon*,clapton*}');
+    let command = spawn('../../demos/compare.py ../uploadedImages/{even/*,odd/*}');
 
     command.stdout.on('data', data => {
         output += data;
@@ -53,7 +53,7 @@ router.post('/file-upload', multipartMiddleware, (req, res) => {
     let filePath = "" + req.files.file.path;
 
     fs.readFile(filePath, function(err, data) {
-        var newPath = path.join(__dirname, "/../uploadedImages/even" + req.files.file.originalFilename);
+        var newPath = path.join(__dirname, "/../uploadedImages/even/" + req.files.file.originalFilename);
         fs.writeFile(newPath, data, function(err) {
             if (err) {
                 console.error("Error while saving image: ", err);
@@ -71,7 +71,7 @@ router.post('/file-upload2', multipartMiddleware, (req, res) => {
     let filePath = "" + req.files.file.path;
 
     fs.readFile(filePath, function(err, data) {
-        var newPath = path.join(__dirname, "/../uploadedImages/odd" + req.files.file.originalFilename);
+        var newPath = path.join(__dirname, "/../uploadedImages/odd/" + req.files.file.originalFilename);
         fs.writeFile(newPath, data, function(err) {
             if (err) {
                 console.error("Error while saving image: ", err);
