@@ -8,7 +8,6 @@ const path = require('path');
 const multipart = require('connect-multiparty');
 const multipartMiddleware = multipart();
 
-var image1 =
 
     /* GET home page. */
     router.get('/', function(req, res, next) {
@@ -16,35 +15,26 @@ var image1 =
     });
 
 router.get('/test', (req, res) => {
-    'use strict';
-    let output = "";
-    let isResponseSent = false;
-    const spawn = require('child_process').spawn;
-	let commandString = path.join(__dirname,'../../openface/demos/compare.py') + ' ' + path.join(__dirname,'../uploadedImages/even/*') + ' ' + path.join(__dirname,'../uploadedImages/odd/*');
-    let command = spawn(commandString);
+const { spawn } = require('child_process')
 
-    command.stdout.on('data', data => {
-        output += data;
-        console.log(`stdout: ${data}`);
-    });
+    const deploySh = spawn('/root/openface/demos/compare.py', [ '/root/some-js-frontend/uploadedImages/even/m(01-32)_gr.jpg', '/root/some-js-frontend/uploadedImages/odd/face_PNG5646.png' ], {
+  //cwd: process.env.HOME + '/myProject',
+  //env: Object.assign({}, process.env, { PATH: process.env.PATH + ':/usr/local/bin' })
+});
+let output = "";
+deploySh.stdout.on('data', (data) => {
+	output += data;
+  console.log(`stdout: ${data}`);
+});
 
-    command.stderr.on('data', data => {
-        console.log(`stderr: ${data}`);
-    });
+deploySh.stderr.on('data', (data) => {
+  console.log(`stderr: ${data}`);
+});
 
-    command.on('error', error => {
-        console.log(`an error ocurred: ${error}`);
-        isResponseSent = true;
-        res.status(500).send("internal server error =/");
-    });
-
-    command.on('close', code => {
-
-        console.log(`child process exited with code ${code}`);
-        if (!isResponseSent)
-            res.status(200).send(output);
-    });
-
+deploySh.on('close', (code) => {
+	res.send(output);
+  console.log(`child process exited with code ${code}`);
+});
 
 });
 
@@ -85,3 +75,4 @@ router.post('/file-upload2', multipartMiddleware, (req, res) => {
 });
 
 module.exports = router;
+
