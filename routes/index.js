@@ -20,8 +20,8 @@ router.get('/test', (req, res) => {
     let output = "";
     let isResponseSent = false;
     const spawn = require('child_process').spawn;
-
-    let command = spawn('../../openface/demos/compare.py ../uploadedImages/even/* ../uploadedImages/odd/*');
+	let commandString = path.join(__dirname,'../../openface/demos/compare.py') + ' ' + path.join(__dirname,'../uploadedImages/even/*') + ' ' + path.join(__dirname,'../uploadedImages/odd/*');
+    let command = spawn(commandString);
 
     command.stdout.on('data', data => {
         output += data;
