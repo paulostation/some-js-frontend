@@ -10,7 +10,7 @@ function analyzeStuff() {
     };
 
     let ajaxSettings = {
-        type: "POST",
+        type: "G",
         url: '/test',
         data: params,
         success: success,
@@ -26,5 +26,5 @@ function analyzeStuff() {
 }
 
 $(document).ready(() => {
-    
+
 });
