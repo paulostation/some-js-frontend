@@ -20,16 +20,19 @@ router.get('/test', (req, res) => {
     const { spawn } = require('child_process');
 
     const deploySh = spawn('bash', [path.join(__dirname, "/../analyze.sh")], {
+        // const deploySh = spawn('ls', ['-la', '.'], {
         //cwd: process.env.HOME + '/myProject',
         //env: Object.assign({}, process.env, { PATH: process.env.PATH + ':/usr/local/bin' })
     });
     let output = "";
     deploySh.stdout.on('data', (data) => {
-        output += data;
+
+        output += data + '\n';
         console.log(`stdout: ${data}`);
     });
 
     deploySh.stderr.on('data', (data) => {
+        output += data + '\n';
         console.log(`stderr: ${data}`);
     });
 
@@ -41,11 +44,12 @@ router.get('/test', (req, res) => {
 });
 
 router.post('/file-upload', multipartMiddleware, (req, res) => {
+    
     //convert path to string
     let filePath = "" + req.files.file.path;
     console.log(filePath);
     fs.readFile(filePath, function(err, data) {
-        image1 = path.join(__dirname, "/../uploadedImages/even/" + req.files.file.originalFilename);
+        image1 = path.join(__dirname, "/../uploadedImages/image1");
         var newPath = image1;
         fs.writeFile(newPath, data, function(err) {
             if (err) {
@@ -64,7 +68,7 @@ router.post('/file-upload2', multipartMiddleware, (req, res) => {
     let filePath = "" + req.files.file.path;
 
     fs.readFile(filePath, function(err, data) {
-        image2 = path.join(__dirname, "/../uploadedImages/odd/" + req.files.file.originalFilename);
+        image2 = path.join(__dirname, "/../uploadedImages/image2");
         var newPath = image2;
         fs.writeFile(newPath, data, function(err) {
             if (err) {
