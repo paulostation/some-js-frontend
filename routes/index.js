@@ -19,7 +19,7 @@ router.get('/', function(req, res, next) {
 router.get('/test', (req, res) => {
     const { spawn } = require('child_process');
 
-    const deploySh = spawn('/root/openface/demos/compare.py', [image1, image2], {
+    const deploySh = spawn('bash', [path.join(__dirname, "/../analyze.sh")], {
         //cwd: process.env.HOME + '/myProject',
         //env: Object.assign({}, process.env, { PATH: process.env.PATH + ':/usr/local/bin' })
     });
