@@ -1,14 +1,16 @@
-<!doctype html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Document</title>
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= title %></title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+    <link rel='stylesheet' href='/stylesheets/dropzone.css' />
     <script
   src="https://code.jquery.com/jquery-3.2.1.min.js"
   integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
   crossorigin="anonymous"></script>
   <!--<script type="text/javascript" src="/js/index.js"></script>-->
-  <script type="text/javascript">
+  <script type="text/javascript" >
+  alert("test");
 
   function analyzeStuff() {
   	
@@ -35,15 +37,33 @@
     $.ajax(ajaxSettings);
 }
   </script>
-</head>
-<body>
+  </head>
+  <body>
+    <h1><%= title %></h1>
+    <p>Welcome to <%= title %></p>
+    <!-- <form action="/file-upload">
+    <input type="file" id="myFile">
+    </form>
+    <form action="/file-upload2">
+    <input type="file" id="myFile2">
+    </form> -->
+      <form action="/file-upload" class="dropzone">
+  <div class="fallback">
+    <input name="file" type="file" multiple />
+  </div>
+</form>
+<form action="/file-upload2" class="dropzone">
+  <div class="fallback">
+    <input name="file" type="file" multiple />
+  </div>
+</form>
 
-<label><strong>Upload File : </strong><input type="file" id="uploadfiles1" /></label><br/>
-<label><strong>Upload File : </strong><input type="file" id="uploadfiles2" /></label><br/>
-<button onclick="analyzeStuff()">Click me</button>
-	<div id="result">
-	</div>
-<!-- Scripts -->
-<script src="/js/upload.js"></script>
-</body>
+  <button onclick="analyzeStuff()">Analyze</button>
+
+  <div id="result">
+  </div>
+    <script src="/js/dropzone.js"></script>
+	
+
+  </body>
 </html>
