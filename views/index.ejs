@@ -11,6 +11,8 @@
   <!--<script type="text/javascript" src="/js/index.js"></script>-->
   <script type="text/javascript" >
 
+  $.get("/clearPhotos");
+
    function analyzeStuff() {
     
     let success = result => {
@@ -20,7 +22,7 @@
         $(".loader").hide();
         let html = "";
         scoreArray.forEach(score => {
-          (score > 0) ? 
+          (score < 1) ? 
           html+= `<div class="col-md-1 green">${score}</div>` : html+= `<div class="col-md-1 red">${score}</div>`;
         })
 
