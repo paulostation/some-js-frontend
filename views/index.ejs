@@ -14,8 +14,9 @@
    function analyzeStuff() {
     
     let success = result => {
+        let scoreArray = result.split(" ");
         $(".loader").hide();
-        $('#result').html(result);
+        $('#result').html(scoreArray);
     };
 
     let error = error => {
@@ -42,12 +43,6 @@
   </head>
   <body>
     <h1><%= title %></h1>    
-    <!-- <form action="/file-upload">
-    <input type="file" id="myFile">
-    </form>
-    <form action="/file-upload2">
-    <input type="file" id="myFile2">
-    </form> -->
       <form action="/file-upload" class="dropzone">
   <div class="fallback">
     <input name="file" type="file" multiple />
@@ -58,10 +53,17 @@
     <input name="file" type="file" multiple />
   </div>
 </form>
-
   <button onclick="analyzeStuff()">Analyze</button>
   <div class="loader"><img src="/images/gifs/spinner.gif"></div>
-  <div id="result">
+  <div class="container">
+  <div class="row">
+
+    
+<%for (var result in results){%>
+  <div class="md-col-1"><%=results[result]%></div>    
+  <%}%>
+
+</div>
   </div>
     <script src="/js/dropzone.js"></script>
 	

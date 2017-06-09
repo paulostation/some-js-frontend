@@ -1,18 +1,19 @@
 /* jshint esversion:6 */
+
 function analyzeStuff() {
 
-    let success = function(result) {
+    let success = result => {
+        $(".loader").hide();
         $('#result').html(result);
     };
 
-    let error = function(error) {
+    let error = error => {
         console.error("Error while analyzing images: ", error);
     };
 
     let ajaxSettings = {
-        type: "G",
+        type: "GET",
         url: '/test',
-        data: params,
         success: success,
         error: error,
         statusCode: {
@@ -22,9 +23,7 @@ function analyzeStuff() {
         }
     };
 
+    $(".loader").show();
+
     $.ajax(ajaxSettings);
 }
-
-$(document).ready(() => {
-
-});
