@@ -13,17 +13,14 @@ var image2 = '/root/openface/images/examples/clapton-1.jpg';
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-    res.render('index', { title: 'Express' });
+    res.render('index', { title: 'Openface demo' });
 });
 
 router.get('/test', (req, res) => {
     const { spawn } = require('child_process');
 
-    const deploySh = spawn('bash', [path.join(__dirname, "/../analyze.sh")], {
-        // const deploySh = spawn('ls', ['-la', '.'], {
-        //cwd: process.env.HOME + '/myProject',
-        //env: Object.assign({}, process.env, { PATH: process.env.PATH + ':/usr/local/bin' })
-    });
+    const deploySh = spawn('bash', [path.join(__dirname, "/../analyze.sh")], {});
+
     let output = "";
     deploySh.stdout.on('data', (data) => {
 
@@ -44,12 +41,12 @@ router.get('/test', (req, res) => {
 });
 
 router.post('/file-upload', multipartMiddleware, (req, res) => {
-    
-    //convert path to string
+
+    //convert path to string    
     let filePath = "" + req.files.file.path;
     console.log(filePath);
     fs.readFile(filePath, function(err, data) {
-        image1 = path.join(__dirname, "/../uploadedImages/image1");
+        image1 = path.join(__dirname, "/../uploadedImages/first" + req.files.file.originalFilename);
         var newPath = image1;
         fs.writeFile(newPath, data, function(err) {
             if (err) {
@@ -68,7 +65,7 @@ router.post('/file-upload2', multipartMiddleware, (req, res) => {
     let filePath = "" + req.files.file.path;
 
     fs.readFile(filePath, function(err, data) {
-        image2 = path.join(__dirname, "/../uploadedImages/image2");
+        image2 = path.join(__dirname, "/../uploadedImages/second" + req.files.file.originalFilename);
         var newPath = image2;
         fs.writeFile(newPath, data, function(err) {
             if (err) {
