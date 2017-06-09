@@ -16,7 +16,13 @@
     let success = result => {
         let scoreArray = result.split(" ");
         $(".loader").hide();
+        let html = "";
+        scoreArray.forEach(score => {
+          html+= `<div class="md-col-1">${score}</div>`;
+        })
+        
         $('#result').html(scoreArray);
+        
     };
 
     let error = error => {
@@ -56,12 +62,10 @@
   <button onclick="analyzeStuff()">Analyze</button>
   <div class="loader"><img src="/images/gifs/spinner.gif"></div>
   <div class="container">
-  <div class="row">
+  <div id="result" class="row">
 
     
-<%for (var score in scoreArray){%>
-  <div class="md-col-1"><%=score[scoreArray]%></div>    
-  <%}%>
+
 
 </div>
   </div>
