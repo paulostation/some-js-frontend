@@ -8,8 +8,8 @@ const path = require('path');
 const multipart = require('connect-multiparty');
 const multipartMiddleware = multipart();
 
-var image1 = '/root/openface/images/examples/lennon-1.jpg';
-var image2 = '/root/openface/images/examples/clapton-1.jpg';
+var fileupload1_counter = 0;
+var fileupload2_counter = 0;
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
@@ -46,13 +46,14 @@ router.post('/file-upload', multipartMiddleware, (req, res) => {
     let filePath = "" + req.files.file.path;
     console.log(filePath);
     fs.readFile(filePath, function(err, data) {
-        image1 = path.join(__dirname, "/../uploadedImages/first" + Math.round(Math.random()* 100000) + req.files.file.originalFilename);
+        image1 = path.join(__dirname, "/../uploadedImages/first" + fileupload1_counter + req.files.file.originalFilename);
         var newPath = image1;
         fs.writeFile(newPath, data, function(err) {
             if (err) {
                 console.error("Error while saving image: ", err);
             } else {
                 res.status(200).send("OK");
+                fileupload1_counter++;
             }
 
         });
@@ -65,13 +66,14 @@ router.post('/file-upload2', multipartMiddleware, (req, res) => {
     let filePath = "" + req.files.file.path;
 
     fs.readFile(filePath, function(err, data) {
-        image2 = path.join(__dirname, "/../uploadedImages/second" + Math.round(Math.random()* 100000) + req.files.file.originalFilename);
+        image2 = path.join(__dirname, "/../uploadedImages/second" + fileupload2_counter + req.files.file.originalFilename);
         var newPath = image2;
         fs.writeFile(newPath, data, function(err) {
             if (err) {
                 console.error("Error while saving image: ", err);
             } else {
                 res.status(200).send("OK");
+                fileupload2_counter++;
             }
 
         });
