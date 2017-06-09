@@ -17,6 +17,7 @@ router.get('/', function(req, res, next) {
 });
 
 router.get('/test', (req, res) => {
+    
     const { spawn } = require('child_process');
 
     const deploySh = spawn('bash', [path.join(__dirname, "/../analyze.sh")], {});
