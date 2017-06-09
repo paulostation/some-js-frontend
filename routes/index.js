@@ -17,7 +17,7 @@ router.get('/', function(req, res, next) {
 });
 
 router.get('/test', (req, res) => {
-    
+
     const { spawn } = require('child_process');
 
     const deploySh = spawn('bash', [path.join(__dirname, "/../analyze.sh")], {});
@@ -25,12 +25,12 @@ router.get('/test', (req, res) => {
     let output = "";
     deploySh.stdout.on('data', (data) => {
 
-        output += data + '\n';
+        output += data;
         console.log(`stdout: ${data}`);
     });
 
     deploySh.stderr.on('data', (data) => {
-        output += data + '\n';
+        output += data;
         console.log(`stderr: ${data}`);
     });
 
