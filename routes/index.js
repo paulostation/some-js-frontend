@@ -82,4 +82,29 @@ router.post('/file-upload2', multipartMiddleware, (req, res) => {
 
 });
 
+router.get('/clearPhotos', (req, res) => {
+
+    const { spawn } = require('child_process');
+
+    const deploySh = spawn('bash', [path.join(__dirname, "/../clear_photos.sh")], {});
+
+    let output = "";
+    deploySh.stdout.on('data', (data) => {
+
+        output += data;
+        console.log(`stdout: ${data}`);
+    });
+
+    deploySh.stderr.on('data', (data) => {
+        output += data;
+        console.log(`stderr: ${data}`);
+    });
+
+    deploySh.on('close', (code) => {
+        res.send(output);
+        console.log(`child process exited with code ${code}`);
+    });
+
+});
+
 module.exports = router;
