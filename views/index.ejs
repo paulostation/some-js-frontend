@@ -8,7 +8,6 @@
   src="https://code.jquery.com/jquery-3.2.1.min.js"
   integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
   crossorigin="anonymous"></script>
-  <!--<script type="text/javascript" src="/js/index.js"></script>-->
   <script type="text/javascript" >
 
   $.get("/clearPhotos");
@@ -16,14 +15,20 @@
    function analyzeStuff() {
     
     let success = result => {
-      console.log(result);
+      
         let scoreArray = result.split("\n");
 
         $(".loader").hide();
+
         let html = "";
+
         scoreArray.forEach(score => {
+          
           (score < 1) ? 
-          html+= `<div class="col-md-1 green">${score}</div>` : html+= `<div class="col-md-1 red">${score}</div>`;
+          //if score is less than 1, green
+          html+= `<div class="col-md-1 green">${score}<br>Same person</div>` 
+          //otherwise, red
+          : html+= `<div class="col-md-1 red">${score}<br>Different person</div>`;
         })
 
         $('#result').html(html);
