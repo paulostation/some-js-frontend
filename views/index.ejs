@@ -1,22 +1,22 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title><%= title %></title>
-    <link rel='stylesheet' href='/stylesheets/style.css' />
-    <link rel='stylesheet' href='/stylesheets/dropzone.css' />
-    <script
+<head>
+  <title><%= title %></title>
+  <link rel='stylesheet' href='/stylesheets/style.css' />
+  <link rel='stylesheet' href='/stylesheets/dropzone.css' />
+  <script
   src="https://code.jquery.com/jquery-3.2.1.min.js"
   integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
   crossorigin="anonymous"></script>
   <script type="text/javascript" >
 
-  $.get("/clearPhotos");
+    $.get("/clearPhotos");
 
-   function analyzeStuff() {
-    
-    let success = result => {
+    function analyzeStuff() {
 
-      
+      let success = result => {
+
+
         let scoreArray = result.split("\n");
 
         $(".loader").hide();
@@ -37,54 +37,117 @@
 
         $('#result').html(html);
         
-    };
+      };
 
-    let error = error => {
+      let error = error => {
         console.error("Error while analyzing images: ", error);
-    };
+      };
 
-    let ajaxSettings = {
+      let ajaxSettings = {
         type: "GET",
         url: '/test',
         success: success,
         error: error,
         statusCode: {
-            404: function() {
-                reject("page not found");
-            }
+          404: function() {
+            reject("page not found");
+          }
         }
-    };
+      };
 
-    $(".loader").show();
+      $(".loader").show();
 
-    $.ajax(ajaxSettings);
-}
+      $.ajax(ajaxSettings);
+    }
+
+    function analyzeStuff2() {
+
+      let success = result => {
+
+
+        let scoreArray = result.split("\n");
+
+        $(".loader").hide();
+
+        let html = "";
+
+        scoreArray.forEach(score => {
+
+          //skip invalid results
+          if("" === score) return;
+          
+          (score < 1) ? 
+          //if score is less than 1, green
+          html+= `<div class="col-md-1 green">${score}<br>Same person</div>` 
+          //otherwise, red
+          : html+= `<div class="col-md-1 red">${score}<br>Different person</div>`;
+        })
+
+        $('#result').html(html);
+        
+      };
+
+      let error = error => {
+        console.error("Error while analyzing images: ", error);
+      };
+
+      let ajaxSettings = {
+        type: "GET",
+        url: '/testVideo',
+        success: success,
+        error: error,
+        statusCode: {
+          404: function() {
+            reject("page not found");
+          }
+        }
+      };
+
+      $(".loader").show();
+
+      $.ajax(ajaxSettings);
+    }
   </script>
-  </head>
-  <body>
-    <div ><p class="logoICC">IBM <strong>Client Center</strong></p> </div>
-    <h1><%= title %></h1>    
-      <form action="/file-upload" class="dropzone">
-  <div class="fallback">
-    <input name="file" type="file" multiple />
-  </div>
-</form>
-<!-- <div class="container"> -->
+</head>
+<body>
+  <div ><p class="logoICC">IBM <strong>Client Center</strong></p> </div>
+  <h1><%= title %></h1>    
+  <form action="/file-upload" class="dropzone">
+    <div class="fallback">
+      <input name="file" type="file" multiple />
+    </div>
+  </form>
+  <!-- <div class="container"> -->
   <div id="result" class="row"></div>
   <!-- </div> -->
-<form action="/file-upload2" class="dropzone">
-  <div class="fallback">
-    <input name="file" type="file" multiple />
-  </div>
-</form>
+  <form action="/file-upload2" class="dropzone">
+    <div class="fallback">
+      <input name="file" type="file" multiple />
+    </div>
+  </form>
   <button onclick="analyzeStuff()">Analyze</button>
+  <br>
+  <form action="/video-upload" class="dropzone">
+    <div class="fallback">
+      <input name="file" type="file" multiple />
+    </div>
+  </form>
+  <!-- <div class="container"> -->
+  <div id="result" class="row"></div>
+  <!-- </div> -->
+  <form action="/video-upload2" class="dropzone">
+    <div class="fallback">
+      <input name="file" type="file" multiple />
+    </div>
+  </form>
+  <button onclick="analyzeStuff2()">Analyze</button>
   <div class="loader"><img src="/images/gifs/spinner.gif"></div>
   
-    <script src="/js/dropzone.js"></script>
-	
-    <!-- Latest compiled and minified CSS -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-    <!-- Latest compiled and minified JavaScript -->
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
-  </body>
+  <script src="/js/dropzone.js"></script>
+
+  <!-- Latest compiled and minified CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+  <!-- Latest compiled and minified JavaScript -->
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+</body>
 </html>

@@ -13,14 +13,45 @@ var fileupload2_counter = 0;
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-    res.render('index', { title: 'Openface demo' });
+    res.render('index', {
+        title: 'Openface demo'
+    });
 });
 
 router.get('/test', (req, res) => {
 
-    const { spawn } = require('child_process');
+    const {
+        spawn
+    } = require('child_process');
 
     const deploySh = spawn('bash', [path.join(__dirname, "/../analyze.sh")], {});
+
+    let output = "";
+    deploySh.stdout.on('data', (data) => {
+
+        output += data;
+        console.log(`stdout: ${data}`);
+    });
+
+    deploySh.stderr.on('data', (data) => {
+        output += data;
+        console.log(`stderr: ${data}`);
+    });
+
+    deploySh.on('close', (code) => {
+        res.send(output);
+        console.log(`child process exited with code ${code}`);
+    });
+
+});
+
+router.get('/testVideo', (req, res) => {
+
+    const {
+        spawn
+    } = require('child_process');
+
+    const deploySh = spawn('bash', [path.join(__dirname, "/../analyzeVideo.sh")], {});
 
     let output = "";
     deploySh.stdout.on('data', (data) => {
@@ -82,9 +113,52 @@ router.post('/file-upload2', multipartMiddleware, (req, res) => {
 
 });
 
+router.post('/video-upload', multipartMiddleware, (req, res) => {
+
+    //convert path to string    
+    let filePath = "" + req.files.file.path;
+    console.log(filePath);
+    fs.readFile(filePath, function(err, data) {
+        image1 = path.join(__dirname, "/../uploadedVideos/first" + req.files.file.originalFilename);
+        var newPath = image1;
+        fs.writeFile(newPath, data, function(err) {
+            if (err) {
+                console.error("Error while saving image: ", err);
+            } else {
+                res.status(200).send("OK");
+                fileupload1_counter++;
+            }
+
+        });
+    });
+
+});
+
+router.post('/video-upload2', multipartMiddleware, (req, res) => {
+    //convert path to string
+    let filePath = "" + req.files.file.path;
+
+    fs.readFile(filePath, function(err, data) {
+        image2 = path.join(__dirname, "/../uploadedVideos/second" + req.files.file.originalFilename);
+        var newPath = image2;
+        fs.writeFile(newPath, data, function(err) {
+            if (err) {
+                console.error("Error while saving image: ", err);
+            } else {
+                res.status(200).send("OK");
+                fileupload2_counter++;
+            }
+
+        });
+    });
+
+});
+
 router.get('/clearPhotos', (req, res) => {
 
-    const { spawn } = require('child_process');
+    const {
+        spawn
+    } = require('child_process');
 
     const deploySh = spawn('bash', [path.join(__dirname, "/../clear_photos.sh")], {});
 
