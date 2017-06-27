@@ -40,8 +40,24 @@ router.get('/test', (req, res) => {
 
     deploySh.on('close', (code) => {
         res.send(output);
+	
+	fs.readdir(path.join(__dirname, '../uploadedImages'), function(err, items) {
+            console.log(items);
+
+            for (var i = 0; i < items.length; i++) {
+                console.log(items[i]);
+            }
+        });
+	
         console.log(`child process exited with code ${code}`);
     });
+
+});
+
+router.get('/getImage', (req, res) => {
+    let filePath = path.join(__dirname, '../uploadedImages/' + req.query.file);
+	console.log("get image: ",filePath);
+            res.download(filePath);
 
 });
 
@@ -61,12 +77,26 @@ router.get('/testVideo', (req, res) => {
     });
 
     deploySh.stderr.on('data', (data) => {
+	
         output += data;
         console.log(`stderr: ${data}`);
     });
 
     deploySh.on('close', (code) => {
-        res.send(output);
+
+	fs.readdir(path.join(__dirname, '../uploadedImages'), function(err, items) {
+
+            if (err) {
+                res.status(500).send(err);
+            } else {
+
+                res.send({
+                    output: output,
+                    fileList: items
+                });
+            }
+        });	
+
         console.log(`child process exited with code ${code}`);
     });
 

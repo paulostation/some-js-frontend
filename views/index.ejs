@@ -12,6 +12,14 @@
 
     $.get("/clearPhotos");
 
+    function renderImages(images) {
+      images.forEach((image,index) => {
+        console.log("rendering image",index);
+        $(".result-image")[0].children("img").src = image;  
+      });
+      
+    }
+
     function analyzeStuff() {
 
       let success = result => {
@@ -65,7 +73,7 @@
       let success = result => {
 
 
-        let scoreArray = result.split("\n");
+        let scoreArray = result.output.split("\n");
 
         $(".loader").hide();
 
@@ -84,6 +92,42 @@
         })
 
         $('#result').html(html);
+
+        let promiseArray = [];
+
+        result.fileList.forEach((file,index) => {
+	let $img = $("<img>", {src: '/getImage?file='+ file,width: '80px', height: '120px'});
+	console.log("updating " + file + "on index " + index);
+$(".result-image:nth-child("+index+")").append($img);
+//	 $("body").append($img);
+ /*         let p1 = new Promise((resolve, reject) => {
+
+            let ajaxSettings = {
+              type: "GET",
+              url: '/getImage?file='+file,
+              success: data => {
+                resolve(data);      
+              },
+              error: error => {
+                reject(error)
+              }
+              
+            };
+
+            $(".loader").show();
+
+            $.ajax(ajaxSettings);
+
+          });*/
+        });
+
+        Promise.all(promiseArray)
+        .then(result =>{
+          renderImages(result);
+        })
+        .catch(error => {
+          reject(error);
+        })
         
       };
 
@@ -95,19 +139,14 @@
         type: "GET",
         url: '/testVideo',
         success: success,
-        error: error,
-        statusCode: {
-          404: function() {
-            reject("page not found");
-          }
-        }
-      };
+        error: error
+      }
 
-      $(".loader").show();
+    $(".loader").show();
 
-      $.ajax(ajaxSettings);
-    }
-  </script>
+    $.ajax(ajaxSettings);
+  }
+</script>
 </head>
 <body>
   <div ><p class="logoICC">IBM <strong>Client Center</strong></p> </div>
@@ -133,7 +172,22 @@
     </div>
   </form>
   <!-- <div class="container"> -->
-  <div id="result" class="row"></div>
+  <div id="result" class="row">
+    <div class="result-image col-md-12"></div>
+    <div class="result-image col-md-12"></div>
+    <div class="result-image col-md-12"></div>
+    <div class="result-image col-md-12"></div>
+    <div class="result-image col-md-12"></div>
+    <div class="result-image col-md-12"></div>
+    <div class="result-image col-md-12"></div>
+    <div class="result-image col-md-12"></div>
+    <div class="result-image col-md-12"></div>
+    <div class="result-image col-md-12"></div>
+    <div class="result-image col-md-12"></div>
+    <div class="result-image col-md-12"></div>
+    <div class="result-image col-md-12"></div>
+  </div>
+
   <!-- </div> -->
   <form action="/video-upload2" class="dropzone">
     <div class="fallback">
@@ -142,7 +196,7 @@
   </form>
   <button onclick="analyzeStuff2()">Analyze</button>
   <div class="loader"><img src="/images/gifs/spinner.gif"></div>
-  
+
   <script src="/js/dropzone.js"></script>
 
   <!-- Latest compiled and minified CSS -->
@@ -151,3 +205,4 @@
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 </body>
 </html>
+
