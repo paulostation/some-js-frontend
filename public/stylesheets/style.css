@@ -15,6 +15,10 @@ a {
     display: none;
 }
 
+#result-images-first #result-score #result-images-second {
+	display: none;
+}
+
 .loader img {
     width: 300px;
     height: 187px;
