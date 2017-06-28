@@ -4,212 +4,33 @@
   <title><%= title %></title>
   <link rel='stylesheet' href='/stylesheets/style.css' />
   <link rel='stylesheet' href='/stylesheets/dropzone.css' />
-  <script
-  src="https://code.jquery.com/jquery-3.2.1.min.js"
-  integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
-  crossorigin="anonymous"></script>
-  <script type="text/javascript" >
-
-//    $.get("/clearPhotos");
-
-    function renderImages(images) {
-      images.forEach((image,index) => {
-        console.log("rendering image",index);
-        $(".result-image")[0].children("img").src = image;  
-      });
-      
-    }
-
-    function analyzeStuff() {
-
-      let success = result => {
-
-
-        let scoreArray = result.split("\n");
-
-        $(".loader").hide();
-
-        let html = "";
-
-        scoreArray.forEach(score => {
-
-          //skip invalid results
-          if("" === score) return;
-          
-          (score < 1) ? 
-          //if score is less than 1, green
-          html+= `<div class="col-md-1 green">${score}<br>Same person</div>` 
-          //otherwise, red
-          : html+= `<div class="col-md-1 red">${score}<br>Different person</div>`;
-        })
-
-        $('#result').html(html);
-        
-      };
-
-      let error = error => {
-        console.error("Error while analyzing images: ", error);
-      };
-
-      let ajaxSettings = {
-        type: "GET",
-        url: '/test',
-        success: success,
-        error: error,
-        statusCode: {
-          404: function() {
-            reject("page not found");
-          }
-        }
-      };
-
-      $(".loader").show();
-
-      $.ajax(ajaxSettings);
-    }
-	function firstRowItems(string) {
-	return (string.indexOf('first') !== -1);
-}
-
-function secondRowItems(string) {
-	return (string.indexOf('second') !== -1);
-}
-
-    function analyzeStuff2() {
-
-      let success = result => {
-
-
-        let scoreArray = result.output.split("\n");
-
-        $(".loader").hide();
-
-        let html = "";
-
-        scoreArray.forEach((score,index) => {
-	if(index > 10) return;
-          //skip invalid results
-          if("" === score) return;
-          
-          (score < 1) ? 
-          //if score is less than 1, green
-          html= `<div class="green">${score}<br>Same person</div>` 
-          //otherwise, red
-          : html= `<div class="red">${score}<br>Different person</div>`;
-
-	$("#result-score .result-score:nth-child("+index+")").html(html);
-        })
-
-        //$('#result').html(html);
-
-        let promiseArray = [];
-
-        result.fileList.filter(firstRowItems).forEach((file,index) => {
-	if(index > 10) return;
-	let $img = $("<img>", {src: '/getImage?file='+ file,width: '80px', height: '120px'});
-	console.log("updating " + file + "on index " + index);
-$("#result-images-first .result-image:nth-child("+index+")").append($img);
-//	 $("body").append($img);
- /*         let p1 = new Promise((resolve, reject) => {
-
-            let ajaxSettings = {
-              type: "GET",
-              url: '/getImage?file='+file,
-              success: data => {
-                resolve(data);      
-              },
-              error: error => {
-                reject(error)
-              }
-              
-            };$("#result-score .result-score:nth-child("+index+")").append($img
-
-            $(".loader").show();
-
-            $.ajax(ajaxSettings);
-
-          });*/
-        });
-
-	result.fileList.filter(secondRowItems).forEach((file,index) => {
-	if(index > 10) return;
-        let $img = $("<img>", {src: '/getImage?file='+ file,width: '80px', height: '120px'});
-        console.log("updating " + file + "on index " + index);
-$("#result-images-second .result-image:nth-child("+index+")").append($img);
-//       $("body").append($img);
- /*         let p1 = new Promise((resolve, reject) => {
-
-            let ajaxSettings = {
-              type: "GET",
-              url: '/getImage?file='+file,
-              success: data => {
-                resolve(data);      
-              },
-              error: error => {
-                reject(error)
-              }
-              
-            };
-
-            $(".loader").show();
-
-            $.ajax(ajaxSettings);
-
-          });*/
-        });
-
-
-        Promise.all(promiseArray)
-        .then(result =>{
-          renderImages(result);
-        })
-        .catch(error => {
-          reject(error);
-        })
-        
-      };
-
-      let error = error => {
-        console.error("Error while analyzing images: ", error);
-      };
-
-      let ajaxSettings = {
-        type: "GET",
-        url: '/testVideo',
-        success: success,
-        error: error
-      }
-
-    $(".loader").show();
-
-    $.ajax(ajaxSettings);
-  }
-</script>
+  <div ><p class="logoICC">IBM <strong>Client Center</strong></p> </div>
 </head>
 <body>
-  <div ><p class="logoICC">IBM <strong>Client Center</strong></p> </div>
-  <h1><%= title %></h1>    
+
+  <h1><%= title %></h1>
+  <h2>Compare photos</h2>
+  <br>
   <form action="/file-upload" class="dropzone">
     <div class="fallback">
       <input name="file" type="file" multiple />
     </div>
   </form>
-  <!-- <div class="container"> -->
-  <div id="result" class="row"></div>
-  <!-- </div> -->
+  <div id="result" class="row"></div>  
   <form action="/file-upload2" class="dropzone">
     <div class="fallback">
       <input name="file" type="file" multiple />
     </div>
   </form>
-  <button onclick="analyzeStuff()">Analyze</button>
+  <br>
+  <button class="btn-primary btn" onclick="analyzeStuff()">Analyze</button>
+  <h2>Compare Videos</h2>
   <br>
   <form action="/video-upload" class="dropzone">
     <div class="fallback">
       <input name="file" type="file" multiple />
     </div>
   </form>
-  <!-- <div class="container"> -->
   <div id="result-images-first" class="row">
     <div class="result-image col-md-1"></div>
     <div class="result-image col-md-1"></div>
@@ -224,51 +45,54 @@ $("#result-images-second .result-image:nth-child("+index+")").append($img);
     <div class="result-image col-md-1"></div>
     <div class="result-image col-md-1"></div>
   </div>
-	<div id="result-score" class="row">
-	<div class="result-score col-md-1"></div>
-<div class="result-score col-md-1"></div>
-<div class="result-score col-md-1"></div>
-<div class="result-score col-md-1"></div>
-<div class="result-score col-md-1"></div>
-<div class="result-score col-md-1"></div>
-<div class="result-score col-md-1"></div>
-<div class="result-score col-md-1"></div>
-<div class="result-score col-md-1"></div>
-<div class="result-score col-md-1"></div>
-<div class="result-score col-md-1"></div>
-<div class="result-score col-md-1"></div>
-<div class="result-score col-md-1"></div>
+  <div id="result-score" class="row">
+   <div class="result-score col-md-1"></div>
+   <div class="result-score col-md-1"></div>
+   <div class="result-score col-md-1"></div>
+   <div class="result-score col-md-1"></div>
+   <div class="result-score col-md-1"></div>
+   <div class="result-score col-md-1"></div>
+   <div class="result-score col-md-1"></div>
+   <div class="result-score col-md-1"></div>
+   <div class="result-score col-md-1"></div>
+   <div class="result-score col-md-1"></div>
+   <div class="result-score col-md-1"></div>
+   <div class="result-score col-md-1"></div>
+   <div class="result-score col-md-1"></div>
+ </div>
+ <div id="result-images-second" class="row">
+  <div class="result-image col-md-1"></div>
+  <div class="result-image col-md-1"></div>
+  <div class="result-image col-md-1"></div>
+  <div class="result-image col-md-1"></div>
+  <div class="result-image col-md-1"></div>
+  <div class="result-image col-md-1"></div>
+  <div class="result-image col-md-1"></div>
+  <div class="result-image col-md-1"></div>
+  <div class="result-image col-md-1"></div>
+  <div class="result-image col-md-1"></div>
+  <div class="result-image col-md-1"></div>
+  <div class="result-image col-md-1"></div>
 </div>
-	 <div id="result-images-second" class="row">
-    <div class="result-image col-md-1"></div>
-    <div class="result-image col-md-1"></div>
-    <div class="result-image col-md-1"></div>
-    <div class="result-image col-md-1"></div>
-    <div class="result-image col-md-1"></div>
-    <div class="result-image col-md-1"></div>
-    <div class="result-image col-md-1"></div>
-    <div class="result-image col-md-1"></div>
-    <div class="result-image col-md-1"></div>
-    <div class="result-image col-md-1"></div>
-    <div class="result-image col-md-1"></div>
-    <div class="result-image col-md-1"></div>
+<form action="/video-upload2" class="dropzone">
+  <div class="fallback">
+    <input name="file" type="file" multiple />
   </div>
-
-  <!-- </div> -->
-  <form action="/video-upload2" class="dropzone">
-    <div class="fallback">
-      <input name="file" type="file" multiple />
-    </div>
-  </form>
-  <button onclick="analyzeStuff2()">Analyze</button>
-  <div class="loader"><img src="/images/gifs/spinner.gif"></div>
-
-  <script src="/js/dropzone.js"></script>
-
-  <!-- Latest compiled and minified CSS -->
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-  <!-- Latest compiled and minified JavaScript -->
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+</form>
+<br>
+<button class="btn-primary btn" onclick="analyzeStuff2()">Analyze</button>
+<div class="loader"><img src="/images/gifs/spinner.gif"></div>
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+<!-- Latest compiled and minified JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+<script
+src="https://code.jquery.com/jquery-3.2.1.min.js"
+integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+crossorigin="anonymous"></script>
+<script src="/js/dropzone.js"></script>
+<script src="/js/index.js" type="text/javascript" ></script>
 </body>
+
 </html>
 
