@@ -1,5 +1,7 @@
 //jshint esversion:6
+
 $.get("/clearPhotos");
+
 
 function analyzeStuff() {
 
@@ -79,7 +81,7 @@ function analyzeStuff2() {
         });
 
         scoreArray.forEach((score, index) => {
-            if (index > 10) return;
+            if (index >= result.fileList.filter(firstRowItems).length) return;
 
             //skip invalid results
             if ("" === score) return;
@@ -144,4 +146,4 @@ $(document).ready(() => {
 
     });
 
-});
+}); 

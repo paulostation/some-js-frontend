@@ -102,13 +102,13 @@ router.get('/testVideo', (req, res) => {
 
 });
 
-router.get('/testVideoAndImage', (req, res) => {
+router.get('/testVideoAndPhoto', (req, res) => {
 
     const {
         spawn
     } = require('child_process');
 
-    const deploySh = spawn('bash', [path.join(__dirname, "/../analyzeVideo.sh")], {});
+    const deploySh = spawn('bash', [path.join(__dirname, "/../analyzeVideoAndPhoto.sh")], {});
 
     let output = "";
     deploySh.stdout.on('data', (data) => {
@@ -126,7 +126,7 @@ router.get('/testVideoAndImage', (req, res) => {
     deploySh.on('close', (code) => {
 
         fs.readdir(path.join(__dirname, '../uploadedImages'), function(err, items) {
-
+		console.log(items);
             if (err) {
                 res.status(500).send(err);
             } else {
@@ -186,23 +186,28 @@ router.post('/file-upload2', multipartMiddleware, (req, res) => {
 
 router.post('/file-upload3', multipartMiddleware, (req, res) => {
     //convert path to string
+
     let filePath = "" + req.files.file.path;
 
     fs.readFile(filePath, function(err, data) {
-        image2 = path.join(__dirname, "/../uploadedVideos/image_file");
-        var newPath = image2;
-        fs.writeFile(newPath, data, function(err) {
-            if (err) {
-                console.error("Error while saving image: ", err);
-            } else {
-                res.status(200).send("OK");
-                // fileupload2_counter++;
-            }
+        for (let i = 0; i < 11; i++) {
+            image2 = path.join(__dirname, "/../uploadedVideos/image_file");
+            var newPath = image2;
+            fs.writeFile(newPath, data, function(err) {
+                if (err) {
+                    console.error("Error while saving image: ", err);
+                } else {
+                    fileupload2_counter++;
+                }
 
-        });
+            });
+        }
+	res.send(200);
     });
 
 });
+
+
 
 router.post('/video-upload', multipartMiddleware, (req, res) => {
 
