@@ -1,27 +1,13 @@
 //jshint esversion:6
-//    $.get("/clearPhotos");
-
-
-function compareVideoToVideo() {
-
-}
-
-function comparePhotosToPhotos() {
-
-}
-
-function compareVideoToPhoto() {
-
-}
+$.get("/clearPhotos");
 
 function analyzeStuff() {
 
     let success = result => {
 
+        $('#analyze-photo-btn').button('reset');
 
         let scoreArray = result.split("\n");
-
-        $(".loader").hide();
 
         let html = "";
 
@@ -57,8 +43,6 @@ function analyzeStuff() {
         }
     };
 
-    $(".loader").show();
-
     $.ajax(ajaxSettings);
 }
 
@@ -77,80 +61,55 @@ function analyzeStuff2() {
 
         let scoreArray = result.output.split("\n");
 
-        $(".loader").hide();
+        $('#analyze-video-photo-btn').button('reset');
 
         let html = "";
 
-        scoreArray.forEach((score, index) => {
-            if (index > 10) return;
-            //skip invalid results
-            if ("" === score) return;
-
-            (score < 1) ?
-            //if score is less than 1, green
-            html = `<div class="green">${score}<br>Same person</div>`
-                //otherwise, red
-                : html = `<div class="red">${score}<br>Different person</div>`;
-
-            $("#result-score .result-score:nth-child(" + index + ")").html(html);
-        });
-
-        //$('#result').html(html);
-
-        let promiseArray = [];
-
         result.fileList.filter(firstRowItems).forEach((file, index) => {
 
-            if (index > 10) return;
-
+            if (index >= scoreArray.length) return;
+            console.log("updating " + file + "on index " + index);
             let $img = $("<img>", {
                 src: '/getImage?file=' + file,
                 width: '80px',
                 height: '120px'
             });
 
-            $("#result-images-first .result-image:nth-child(" + index + ")").append($img);
+            $("#video-image-results .video-image-result:nth-child(" + index + ")").append($img);
+        });
+
+        scoreArray.forEach((score, index) => {
+            if (index > 10) return;
+
+            //skip invalid results
+            if ("" === score) return;
+
+            html = "<br><br>";
+
+            if (score < 1) {
+                //if score is less than 1, green
+                html += `<div class="green">${score}<br>Same person</div>`;
+            } else {
+                //otherwise, red
+                html += `<div class="red">${score}<br>Different person</div>`;
+            }
+
+            html += "<br>";
+
+            $("#video-image-results .video-image-result:nth-child(" + index + ")").append(html);
         });
 
         result.fileList.filter(secondRowItems).forEach((file, index) => {
-            if (index > 10) return;
+            if (index >= result.fileList.filter(firstRowItems).length) return;
             let $img = $("<img>", {
                 src: '/getImage?file=' + file,
                 width: '80px',
                 height: '120px'
             });
             console.log("updating " + file + "on index " + index);
-            $("#result-images-second .result-image:nth-child(" + index + ")").append($img);
-            //       $("body").append($img);
-            /*         let p1 = new Promise((resolve, reject) => {
-
-                       let ajaxSettings = {
-                         type: "GET",
-                         url: '/getImage?file='+file,
-                         success: data => {
-                           resolve(data);      
-                         },
-                         error: error => {
-                           reject(error)
-                         }
-                         
-                       };
-
-                       $(".loader").show();
-
-                       $.ajax(ajaxSettings);
-
-                     });*/
+            $("#video-image-results .video-image-result:nth-child(" + index + ")").append("<br>");
+            $("#video-image-results .video-image-result:nth-child(" + index + ")").append($img);
         });
-
-
-        Promise.all(promiseArray)
-            .then(result => {
-                renderImages(result);
-            })
-            .catch(error => {
-                reject(error);
-            });
 
     };
 
@@ -165,7 +124,24 @@ function analyzeStuff2() {
         error: error
     };
 
-    $(".loader").show();
-
     $.ajax(ajaxSettings);
 }
+
+$(document).ready(() => {
+
+
+    $('#analyze-photo-btn').on('click', function() {
+        analyzeStuff();
+        var $this = $(this);
+        $this.button('loading');
+
+    });
+
+    $('#analyze-video-photo-btn').on('click', function() {
+        analyzeStuff2();
+        var $this = $(this);
+        $this.button('loading');
+
+    });
+
+});

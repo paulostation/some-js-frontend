@@ -7,7 +7,6 @@
   <div ><p class="logoICC">IBM <strong>Client Center</strong></p> </div>
 </head>
 <body>
-
   <h1><%= title %></h1>
   <h2>Compare photos</h2>
   <br>
@@ -23,76 +22,33 @@
     </div>
   </form>
   <br>
-  <button class="btn-primary btn" onclick="analyzeStuff()">Analyze</button>
-  <h2>Compare Videos</h2>
+  <button id="analyze-photo-btn" type="button" class="btn btn-primary btn-lg " data-loading-text="<i class='fa fa-circle-o-notch fa-spin'></i> Processing...">Analyze</button>
+  <h2>Compare Video and photo</h2>
   <br>
   <form action="/video-upload" class="dropzone">
     <div class="fallback">
       <input name="file" type="file" multiple />
     </div>
   </form>
-  <div id="result-images-first" class="row">
-    <div class="result-image col-md-1"></div>
-    <div class="result-image col-md-1"></div>
-    <div class="result-image col-md-1"></div>
-    <div class="result-image col-md-1"></div>
-    <div class="result-image col-md-1"></div>
-    <div class="result-image col-md-1"></div>
-    <div class="result-image col-md-1"></div>
-    <div class="result-image col-md-1"></div>
-    <div class="result-image col-md-1"></div>
-    <div class="result-image col-md-1"></div>
-    <div class="result-image col-md-1"></div>
-    <div class="result-image col-md-1"></div>
+  <div id="video-image-results" class="row">
+    <div class="video-image-result col-md-2"></div>
+    <div class="video-image-result col-md-2"></div>
+    <div class="video-image-result col-md-2"></div>
+    <div class="video-image-result col-md-2"></div>
+    <div class="video-image-result col-md-2"></div>
   </div>
-  <div id="result-score" class="row">
-   <div class="result-score col-md-1"></div>
-   <div class="result-score col-md-1"></div>
-   <div class="result-score col-md-1"></div>
-   <div class="result-score col-md-1"></div>
-   <div class="result-score col-md-1"></div>
-   <div class="result-score col-md-1"></div>
-   <div class="result-score col-md-1"></div>
-   <div class="result-score col-md-1"></div>
-   <div class="result-score col-md-1"></div>
-   <div class="result-score col-md-1"></div>
-   <div class="result-score col-md-1"></div>
-   <div class="result-score col-md-1"></div>
-   <div class="result-score col-md-1"></div>
- </div>
- <div id="result-images-second" class="row">
-  <div class="result-image col-md-1"></div>
-  <div class="result-image col-md-1"></div>
-  <div class="result-image col-md-1"></div>
-  <div class="result-image col-md-1"></div>
-  <div class="result-image col-md-1"></div>
-  <div class="result-image col-md-1"></div>
-  <div class="result-image col-md-1"></div>
-  <div class="result-image col-md-1"></div>
-  <div class="result-image col-md-1"></div>
-  <div class="result-image col-md-1"></div>
-  <div class="result-image col-md-1"></div>
-  <div class="result-image col-md-1"></div>
-</div>
-<form action="/video-upload2" class="dropzone">
-  <div class="fallback">
-    <input name="file" type="file" multiple />
-  </div>
-</form>
-<br>
-<button class="btn-primary btn" onclick="analyzeStuff2()">Analyze</button>
-<div class="loader"><img src="/images/gifs/spinner.gif"></div>
-<!-- Latest compiled and minified CSS -->
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-<!-- Latest compiled and minified JavaScript -->
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
-<script
-src="https://code.jquery.com/jquery-3.2.1.min.js"
-integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
-crossorigin="anonymous"></script>
-<script src="/js/dropzone.js"></script>
-<script src="/js/index.js" type="text/javascript" ></script>
+  <form action="/file-upload3" class="dropzone">
+    <div class="fallback">
+      <input name="file" type="file" multiple />
+    </div>
+  </form>
+  <br>
+  
+  <button id="analyze-video-photo-btn" type="button" class="btn btn-primary btn-lg " data-loading-text="<i class='fa fa-circle-o-notch fa-spin'></i> Processing...">Analyze</button>  
+ <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>  
+  <script src="/js/dropzone.js"></script>
+  <script src="/js/index.js" type="text/javascript" ></script>
 </body>
-
 </html>
-

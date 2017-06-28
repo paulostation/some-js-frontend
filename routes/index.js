@@ -55,7 +55,7 @@ router.get('/test', (req, res) => {
 });
 
 router.get('/getImage', (req, res) => {
-    let filePath = path.join(__dirname, '../uploadedImages/' + req.query.file);
+    let filePath = path.join(__dirname, '../uploadedImages2/' + req.query.file);
     console.log("get image: ", filePath);
     res.download(filePath);
 
@@ -84,7 +84,7 @@ router.get('/testVideo', (req, res) => {
 
     deploySh.on('close', (code) => {
 
-        fs.readdir(path.join(__dirname, '../uploadedImages'), function(err, items) {
+        fs.readdir(path.join(__dirname, '../uploadedImages2'), function(err, items) {
 
             if (err) {
                 res.status(500).send(err);
@@ -184,13 +184,33 @@ router.post('/file-upload2', multipartMiddleware, (req, res) => {
 
 });
 
+router.post('/file-upload3', multipartMiddleware, (req, res) => {
+    //convert path to string
+    let filePath = "" + req.files.file.path;
+
+    fs.readFile(filePath, function(err, data) {
+        image2 = path.join(__dirname, "/../uploadedVideos/image_file");
+        var newPath = image2;
+        fs.writeFile(newPath, data, function(err) {
+            if (err) {
+                console.error("Error while saving image: ", err);
+            } else {
+                res.status(200).send("OK");
+                // fileupload2_counter++;
+            }
+
+        });
+    });
+
+});
+
 router.post('/video-upload', multipartMiddleware, (req, res) => {
 
     //convert path to string    
     let filePath = "" + req.files.file.path;
     console.log(filePath);
     fs.readFile(filePath, function(err, data) {
-        image1 = path.join(__dirname, "/../uploadedVideos/first" + req.files.file.originalFilename);
+        image1 = path.join(__dirname, "/../uploadedVideos/video_file");
         var newPath = image1;
         fs.writeFile(newPath, data, function(err) {
             if (err) {
@@ -205,25 +225,7 @@ router.post('/video-upload', multipartMiddleware, (req, res) => {
 
 });
 
-router.post('/video-upload2', multipartMiddleware, (req, res) => {
-    //convert path to string
-    let filePath = "" + req.files.file.path;
 
-    fs.readFile(filePath, function(err, data) {
-        image2 = path.join(__dirname, "/../uploadedVideos/second" + req.files.file.originalFilename);
-        var newPath = image2;
-        fs.writeFile(newPath, data, function(err) {
-            if (err) {
-                console.error("Error while saving image: ", err);
-            } else {
-                res.status(200).send("OK");
-                fileupload2_counter++;
-            }
-
-        });
-    });
-
-});
 
 router.get('/clearPhotos', (req, res) => {
 
