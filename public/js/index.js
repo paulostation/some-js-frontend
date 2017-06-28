@@ -1,5 +1,5 @@
 //jshint esversion:6
-//    $.get("/clearPhotos");
+    $.get("/clearPhotos");
 
 
 function compareVideoToVideo() {
