@@ -1,2 +1,2 @@
 #!/bin/bash
-python openface/demos/compare.py uploadedImages/{first*,second*}
+python ../openface/demos/compare.py uploadedImages/{first*,second*}
